@@ -1,0 +1,74 @@
+---
+title: "MTH6139 Time Series" 
+subtitle: "Coursework 1 -- Template" 
+author: "Khalid Yislam" 
+date: "Spring term 2025" 
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: spacelab 
+    highlight: tango
+---
+ 
+```{r, echo=FALSE}
+# This code will display the QMUL logo at the top right of th]e page
+# Do not change this code
+htmltools::img(src = knitr::image_uri("images/QMlogo.png"),
+               alt = 'logo',
+               style = 'position:absolute; top:0; right:0; padding:10px; width:20%;')
+```
+
+
+### Introduction
+
+> <font size = "5">The co2 dataset obverses the concentration of co2 in the atmosphere every month from 1959 to 1997 in Mauna Loa.
+The purpose of the project is to explore a time series on co2 concentration using Meta's prophet forecasting system</font size>
+
+
+# Studying co2 growth
+``` {r}
+plot(co2)
+
+
+```
+
+
+><font size = "4">From the co2 plot we can see that the trend is a steady increase in co2 concentration starting around 320ppm in the year 1960 going up to around 370ppm in the year 200. We can also see that there is a yearly seasonality taking place causing the co2 concentration to spike up and down.</font
+
+# Using Meta's prophet forcasting system
+```{r}
+
+co2DataFrame <- data.frame(
+    ds = zoo::as.yearmon(time(co2)),
+    y = as.numeric(co2)
+    
+)
+```
+> <font size="4"> To use prophet the co2 time series was setup as a data frame with the time column labelled as 'ds' and the data column labelled as 'y'</font>
+
+
+# Prophet's Forecast of Co2 concentration
+```{r, message=FALSE, warning=FALSE}
+library(prophet)
+co2graph <- prophet(co2DataFrame)
+
+co2Future <- make_future_dataframe(co2graph,8, freq = "quarter")
+
+co2Forecast <- predict(co2graph, co2Future)
+plot(co2graph, co2Forecast)
+```
+> <font size="4">Here prophet predicts and generates the forecast 8 quarters into the future of the values of the co2 concentration.The black dots show the existing values of co2 concentration and the blue lines shows the predicted forecast which also following the same trend.</font>
+
+
+
+
+
+
+
+
+
+
+
+
+
